@@ -1,15 +1,28 @@
 
 
-Model(y ~ Poisson(mean ~ age + sex + time + age:time),
-      age ~ Age(s = 0.1),
-      sex ~ Normal(s = 0.2),
-      time ~ LinearTrend(s = 0.3),
-      age:time ~ AR1(age < 30 ~ 0,
-                     s = 0.1))
+model1 <- model_array(deaths) %>%
+    set_lik_poisson_mort(~ age * sex + time, exposure = popn) %>%
+    set_datamod_norm(se = se_regdeath, data = survey) %>%
+    set_datamod_bias(~ age + time, data = regdeaths)
 
-reg_orig:reg_dest ~ Exch(reg_orig == reg_dest ~ 0,
-                         s = 3)
-                         
+model2 <- model_account(acc) %>%
+    set_set
+
+
+
+
+fit <- est_model(model, engine = "stan")
+
+
+
+model2 <- model_hier_latent(deaths_latent) %>%
+    set_lik_Po
+    
+
+
+Mortality(y ~ Poisson(mean ~ age * sex + time),
+          age ~ LT(
+          
 
 
       
